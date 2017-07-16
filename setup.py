@@ -9,5 +9,4 @@ setup(
     description='A modern editor with a backend written in Rust.',
     author='Raph Levien',
     packages=find_packages()
-    test_suite='python/tests'
 )
