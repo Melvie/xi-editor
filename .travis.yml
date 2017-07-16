@@ -9,9 +9,6 @@ os:
   - linux
   - osx
 
-install:
- - if [ "$TRAVIS_OS_NAME" == "osx" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;bash miniconda.sh -b -p $HOME/miniconda; export PATH="$HOME/miniconda/bin:$PATH" ;  fi
-
 matrix:
   allow_failures:
     - rust: nightly
@@ -30,4 +27,27 @@ script:
 language: python
 python:
   - "3.5"
+matrix:
+  include:
+  - os: osx
+    language: generic
+    env: PYTHON=3.5.2
+
+before_install: |
+  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    brew update
+    brew install openssl readline
+    brew outdated pyenv || brew upgrade pyenv
+    brew install pyenv-virtualenv
+    pyenv install $PYTHON
+    export PYENV_VERSION=$PYTHON
+    export PATH="/Users/travis/.pyenv/shims:${PATH}"
+    pyenv-virtualenv venv
+    source venv/bin/activate
+    python --version
+  fi
+
+install:
+  - python -m pip install -U pip
+  
 script: python setup.py install &&  pytest python/tests
