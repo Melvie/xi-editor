@@ -4,10 +4,11 @@ matrix:
       rust:
         - stable
         - nightly
-      os:
-        - linux
-        - osx
-      osx_image: xcode8.2
+      matrix:
+        include:
+          - os: linux
+          - os: osx 
+            osx_image: xcode8.2
       matrix:
         allow_failures:
           - rust: nightly
@@ -22,29 +23,28 @@ matrix:
         - for MANIFEST in Cargo.toml */Cargo.toml; do cargo test --manifest-path $MANIFEST || exit; done
 
     - language: python
-      python:
-        - "3.5"
-      os: 
-        - linux
-        - osx
-      osx_image: xcode8.2
-      before_install: |
-        if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-          brew update
-          brew outdated pyenv || brew upgrade pyenv
-          brew install pyenv-virtualenv
-          pyenv install $PYTHON
-          export PYENV_VERSION=$PYTHON
-          export PATH="/Users/travis/.pyenv/shims:${PATH}"
-          pyenv-virtualenv venv
-          source venv/bin/activate
-          python --version
-        fi
+      python: 3.5
+      matrix:
+        include:
+          - os: linux
+          - os: osx
+            osx_image: xcode8.2
+            before_install: |
+              if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+                brew update
+                brew outdated pyenv || brew upgrade pyenv
+                brew install pyenv-virtualenv
+                pyenv install $PYTHON
+                export PYENV_VERSION=$PYTHON
+                export PATH="/Users/travis/.pyenv/shims:${PATH}"
+                pyenv-virtualenv venv
+                source venv/bin/activate
+                python --version
+              fi
+            install:
+              - python -m pip install -U pip
+              - pip install pytest
 
-      install:
-        - python -m pip install -U pip
-        - pip install pytest
-
-      script: 
+      script:
         - python setup.py install
         - python -m pytest python/tests
