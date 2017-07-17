@@ -27,10 +27,6 @@ script:
 language: python
 python:
   - "3.5"
-matrix:
-  include:
-  - os: osx
-    language: generic
 
 before_install: |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -42,11 +38,11 @@ before_install: |
     export PATH="/Users/travis/.pyenv/shims:${PATH}"
     pyenv-virtualenv venv
     source venv/bin/activate
-
     python --version
   fi
 
 install:
   - python -m pip install -U pip
+  - pip instal pytest
 
 script: python setup.py install && pytest python/tests
