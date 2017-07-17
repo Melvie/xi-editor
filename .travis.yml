@@ -27,7 +27,6 @@ script:
 language: python
 python:
   - "3.5"
-
 before_install: |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew update
@@ -43,6 +42,8 @@ before_install: |
 
 install:
   - python -m pip install -U pip
-  - pip instal pytest
+  - pip install pytest
 
-script: python setup.py install && pytest python/tests
+script: 
+  - python setup.py install
+  - python -m pytest python/tests
