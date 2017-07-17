@@ -25,12 +25,12 @@ script:
   - for MANIFEST in Cargo.toml */Cargo.toml; do cargo test --manifest-path $MANIFEST || exit; done
 
 language: python
-
+python:
+  - "3.5"
 matrix:
   include:
   - os: osx
     language: generic
-    env: PYTHON=3.5
 
 before_install: |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -42,7 +42,6 @@ before_install: |
     export PATH="/Users/travis/.pyenv/shims:${PATH}"
     pyenv-virtualenv venv
     source venv/bin/activate
-    pip install pytest
 
     python --version
   fi
