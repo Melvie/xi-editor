@@ -1,26 +1,23 @@
 matrix:
   include:
     - language: rust
-      rust:
-        - stable
-        - nightly
       matrix:
         include:
           - os: linux
             rust: stable
-            sudo: required 
+            sudo: required
+          - os: osx
+            rust: nightly
+            osx_image: xcode8.2
+          - os: osx
+            rust: nightly
+            osx_image: xcode8.2
           - os: linux
-            rust: nightly
-            sudo: required 
-          - os: osx
-            rust: nightly
-            osx_image: xcode8.2
-          - os: osx
             rust: stable
-            osx_image: xcode8.2
-      matrix:
-        allow_failures:
-          - rust: nightly
+            sudo: required
+
+      allow_failures:
+        - rust: nightly
       cache:
         directories:
           - $HOME/.cargo
@@ -38,7 +35,6 @@ matrix:
           - os: linux
             sudo: required
           - os: osx
-            language: generic
             osx_image: xcode8.2
       before_install: |
         if [ "$TRAVIS_OS_NAME" == "osx" ]; then
