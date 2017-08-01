@@ -2,13 +2,15 @@ matrix:
   include:
     - language: rust
       rust: stable, nightly
-      os:
-        - linux
-        - osx
-
       matrix:
-        allow_failures:
-          - rust: nightly
+        include:
+          os:
+            - linux
+            - osx
+
+      allow_failures:
+        - rust: nightly
+
       cache:
         directories:
           - $HOME/.cargo
