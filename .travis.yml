@@ -28,6 +28,7 @@ matrix:
         - "3.5"
       os:
         - osx
+      osx_image: xcode8.2
 
       before_install: |
         if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -54,6 +55,8 @@ matrix:
         - "3.5"
       os:
         - linux
+
+      sudo: required
       script:
         - python setup.py install
         - python -m pytest python/tests
