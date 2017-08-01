@@ -21,7 +21,7 @@ matrix:
 
     - language: python
       python: 3.5
-       os:
+      os:
         - osx
         - linux
 
