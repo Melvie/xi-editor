@@ -1,7 +1,9 @@
 matrix:
   include:
     - language: rust
-      rust: stable, nightly
+      rust:
+        - stable
+        - nightly
       matrix:
         include:
           os:
@@ -22,10 +24,10 @@ matrix:
         - for MANIFEST in Cargo.toml */Cargo.toml; do cargo test --manifest-path $MANIFEST || exit; done
 
     - language: python
-      python: 3.5
+      python:
+        - "3.5"
       os:
         - osx
-        - linux
 
       before_install: |
         if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -43,6 +45,15 @@ matrix:
         - python -m pip install -U pip
         - pip install pytest
 
+      script:
+        - python setup.py install
+        - python -m pytest python/tests
+
+    - language: python
+      python:
+        - "3.5"
+      os:
+        - linux
       script:
         - python setup.py install
         - python -m pytest python/tests
