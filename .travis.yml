@@ -1,20 +1,11 @@
 matrix:
   include:
     - language: rust
-      matrix:
-        include:
-          - os: linux
-            rust: stable
-            sudo: required
-          - os: osx
-            rust: nightly
-            osx_image: xcode8.2
-          - os: osx
-            rust: nightly
-            osx_image: xcode8.2
-          - os: linux
-            rust: stable
-            sudo: required
+      rust: stable, nightly
+      os:
+        - linux
+        - osx
+
       matrix:
         allow_failures:
           - rust: nightly
@@ -29,15 +20,11 @@ matrix:
         - for MANIFEST in Cargo.toml */Cargo.toml; do cargo test --manifest-path $MANIFEST || exit; done
 
     - language: python
+      python: 3.5
+       os:
+        - osx
+        - linux
 
-      matrix:
-        include:
-          - os: osx
-            python: 3.5
-            osx_image: xcode8.2
-          - os: linux
-            python: 3.5
-            sudo: required
       before_install: |
         if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           brew update
