@@ -1,47 +1,39 @@
+sudo: required
+language: rust
+rust:
+  - stable
+  - nightly
+python:
+  - '3.5'
+os:
+  - linux
+  - osx
 matrix:
-  include:
-    - language: rust
-      rust:
-        - stable
-        - nightly
-      matrix:
-        include:
-          os:
-            - linux
-            - osx
-
-      allow_failures:
-        - rust: nightly
-
-      cache:
-        directories:
-          - $HOME/.cargo
-      script:
-        - cd rust
-        - export CARGO_TARGET_DIR=/tmp/target
-        - cargo build || exit
-        - cargo build --manifest-path syntect-plugin/Cargo.toml || exit
-        - for MANIFEST in Cargo.toml */Cargo.toml; do cargo test --manifest-path $MANIFEST || exit; done
-
-    - language: python
-      python:
-        - "3.5"
-      before_install: |
-        if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-          brew update
-          brew outdated pyenv || brew upgrade pyenv
-          brew install pyenv-virtualenv
-          pyenv install $PYTHON
-          export PYENV_VERSION=$PYTHON
-          export PATH="/Users/travis/.pyenv/shims:${PATH}"
-          pyenv-virtualenv venv
-          source venv/bin/activate
-          python --version
-        fi
-      install:
-        - python -m pip install -U pip
-        - pip install pytest
-
-      script:
-        - python setup.py install
-        - python -m pytest python/tests
+  allow_failures:
+    - rust: nightly
+cache:
+  directories:
+    - $HOME/.cargo
+before_install: |
+  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    brew update
+    brew outdated pyenv || brew upgrade pyenv
+    brew install pyenv-virtualenv
+    pyenv install $PYTHON
+    export PYENV_VERSION=$PYTHON
+    export PATH="/Users/travis/.pyenv/shims:${PATH}"
+    pyenv-virtualenv venv
+    source venv/bin/activate
+    python --version
+  fi
+install:
+  - python -m pip install -U pip
+  - pip install pytest
+script:
+  - cd rust
+  - export CARGO_TARGET_DIR=/tmp/target
+  - cargo build || exit
+  - cargo build --manifest-path syntect-plugin/Cargo.toml || exit
+  - for MANIFEST in Cargo.toml */Cargo.toml; do cargo test --manifest-path $MANIFEST || exit; done
+  - python setup.py install
+  - python -m pytest python/tests
