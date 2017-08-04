@@ -4,7 +4,7 @@ rust:
   - stable
   - nightly
 python:
-  - '3.5'
+  - "3.5"
 os:
   - linux
   - osx
@@ -27,13 +27,14 @@ before_install: |
     python --version
   fi
 install:
-  - python -m pip install -U pip
-  - pip install pytest
+  - sudo python -m pip install -U pip
+  - sudo pip install pytest
 script:
   - cd rust
   - export CARGO_TARGET_DIR=/tmp/target
   - cargo build || exit
   - cargo build --manifest-path syntect-plugin/Cargo.toml || exit
   - for MANIFEST in Cargo.toml */Cargo.toml; do cargo test --manifest-path $MANIFEST || exit; done
-  - python3 setup.py install
-  - python3 -m pytest python/tests
+  - python --version
+  - python setup.py install
+  - python -m pytest python/tests
